@@ -9,10 +9,31 @@ $(function(){
        if (children.length > 0){
          var type = children[0].tagName;
          if (type == "desc" || type == "SPAN"){
-           graph.addNodeAtMouse();
+           // graph.addNodeAtMouse();
          }
        }
      }
+  });
+
+  // var $canvas = $('#canvas')
+  // $canvas.contextMenu(function(e) {
+  //   console.log("right click");
+  // });
+
+  function rightClickMenu(key, opt) {
+    if("newNode" == key) {
+      console.log(key);
+      graph.addNodeAtMouse();
+    }
+  }
+  $.contextMenu({
+    // define which elements trigger this menu
+    selector: "#canvas",
+    // define the elements of the menu
+    items: {
+        newNode: {name: "New Node", callback: rightClickMenu }
+    }
+    // there's more, have a look at the demos and docs...
   });
   
   // ui code

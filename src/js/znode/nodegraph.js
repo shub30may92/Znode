@@ -6,9 +6,9 @@ function NodeGraph(){
   var currentConnection = {};
   var connections = {};
   var connectionId = 0;
-  var newNode;
-  var nodes = {};
-  var nodeId = 0;
+  var newAgent;
+  var agents = {};
+  var agentCode = 0;
   var mouseX = 0, mouseY = 0;
   var loops = [];
   var pathEnd = {};
@@ -70,7 +70,7 @@ function NodeGraph(){
     }
     
  
-    node = new Node(x, y, currentNode.width(), currentNode.height());
+    node = new Agent(x, y, currentNode.width(), currentNode.height());
     saveConnection(node, dir);
     currentNode = node;
   }
@@ -123,40 +123,41 @@ function NodeGraph(){
     }
   });
   
-  $(document).keydown(function(e){
+  $(document).keydown(function(e){    
     key[e.keyCode] = true;
   }).keyup(function(e){
     key[e.keyCode] = false;
   });
+
   
   $(document).mousemove(function(e){
     mouseX = e.pageX;
     mouseY = e.pageY - topHeight;
   }).mouseup(function(e){
     overlay.hide();
-    var creatingNewNode = newNode;
+    var creatingNewNode = newAgent;
     
     hitConnect.css({"left":mouseX - 5, "top":mouseY + topHeight - 5});
-    for (var i in nodes){
-      if (nodes[i]){
-        var n = nodes[i];
+    for (var i in agents){
+      if (agents[i]){
+        var n = agents[i];
         if (n != currentNode){
           var nLoc = n.content.position();
           if (hitTest(toGlobal(nLoc, n.left), hitConnect)){
             saveConnection(n, "left");
-            newNode = false;
+            newAgent = false;
             break;
           }else if (hitTest(toGlobal(nLoc, n.top), hitConnect)){
             saveConnection(n, "top");
-            newNode = false;
+            newAgent = false;
             break;
           }else if (hitTest(toGlobal(nLoc, n.right), hitConnect)){
             saveConnection(n, "right");
-            newNode = false;
+            newAgent = false;
             break;
           }else if (hitTest(toGlobal(nLoc, n.bottom), hitConnect)){
             saveConnection(n, "bottom");
-            newNode = false;
+            newAgent = false;
             break;
           }
         }
@@ -164,7 +165,7 @@ function NodeGraph(){
     }
     hitConnect.css("left", "-100px");
     
-    if (newNode){
+    if (newAgent){
       if (key[SHIFT]){
         menu.css({"left":mouseX - 10, "top":mouseY});
         menu.show();
@@ -188,7 +189,7 @@ function NodeGraph(){
         }
       }
     }
-    newNode = false;
+    newAgent = false;
     
     for (var i in loops){
       clearInterval(loops[i]);
@@ -234,14 +235,14 @@ function NodeGraph(){
   }
   
   
-  function Node(xp, yp, w, h, noDelete, forceId){
+  function Agent(xp, yp, w, h, noDelete, forceId){
     
     if (forceId){
-       nodeId = forceId;
+       agentCode = forceId;
     }
-    this.id = nodeId;
-    nodes[nodeId] = this;
-    nodeId++;
+    this.id = agentCode;
+    agents[agentCode] = this;
+    agentCode++;
     
     var curr = this;
     this.connections = {};
@@ -413,7 +414,7 @@ function NodeGraph(){
       var nLoc = n.position();
       var x = loc.left + nLoc.left + 5;
       var y = loc.top + nLoc.top - topHeight + 5;
-      newNode = true;
+      newAgent = true;
       
       var id = setInterval(function(){
         link.attr("path","M " + x + " " + y + " L " + mouseX + " " + mouseY);
@@ -436,7 +437,7 @@ function NodeGraph(){
        delete curr.connections[i];
      }
      n.remove();
-     delete nodes[this.id];
+     delete agents[this.id];
    }
     
     resizer.mousedown(function(e){
@@ -498,10 +499,10 @@ function NodeGraph(){
   
   
  function clear(){
-    nodeId = 0;
+    agentCode = 0;
     connectionsId = 0;
-    for (var i in nodes){
-      nodes[i].remove();
+    for (var i in agents){
+      agents[i].remove();
     }
   }
   
@@ -513,7 +514,7 @@ function NodeGraph(){
   }
   
   this.addNode = function(x, y, w, h, noDelete){
-    return new Node(x, y, w, h, noDelete);
+    return new Agent(x, y, w, h, noDelete);
   }
   
   var defaultWidth = 100;
@@ -523,14 +524,14 @@ function NodeGraph(){
     //alert("Zevan");
     var w = currentNode.width() || defaultWidth;
     var h = currentNode.height () || defaultHeight;
-    var temp = new Node(mouseX, mouseY + 30, w, h);
+    var temp = new Agent(mouseX, mouseY + 30, w, h);
     currentNode = temp;
     currentConnection = null;
   }
   
   function defaultNode(){
     
-    var temp = new Node(win.width() / 2 - defaultWidth / 2, 
+    var temp = new Agent(win.width() / 2 - defaultWidth / 2, 
                         win.height() / 2 - defaultHeight / 2,
                         defaultWidth, defaultHeight, true);
     temp.txt[0].focus();
@@ -540,24 +541,24 @@ function NodeGraph(){
 
   this.fromJSON = function(data){
     clear();
-    for (var i in data.nodes){
-      var n = data.nodes[i];
+    for (var i in data.agents){      
+      var n = data.agents[i];
       var ex = (i == "0") ? true : false;
-      var temp = new Node(n.x, n.y, n.width, n.height, ex, n.id);
+      var temp = new Agent(n.x, n.y, n.width, n.height, ex, n.id);
       var addreturns = n.txt.replace(/\\n/g,'\n');
       temp.txt.val(addreturns);
     }
     for (i in data.connections){
       var c = data.connections[i];
-      createConnection(nodes[c.nodeA], c.conA, nodes[c.nodeB], c.conB);
+      createConnection(agents[c.from_agent], c.conA, agents[c.to_agent], c.conB);
     }
   }
   
   this.toJSON = function(){
-    var json = '{"nodes" : [';
-    for (var i in nodes){
-      var n = nodes[i];
-      json += '{"id" : ' + n.id + ', ';
+    var json = '{"agents" : [';
+    for (var i in agents){
+      var n = agents[i];
+      json += '{"code" : ' + n.id + ', ';
       json += '"x" : ' + n.x() + ', ';
       json += '"y" : ' + n.y() + ', ';
       json += '"width" : ' + n.width() + ', ';
