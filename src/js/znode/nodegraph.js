@@ -558,7 +558,7 @@ function NodeGraph(){
     var json = '{"agents" : [';
     for (var i in agents){
       var n = agents[i];
-      json += '{"code" : ' + n.id + ', ';
+      json += '{"id" : ' + n.id + ', ';
       json += '"x" : ' + n.x() + ', ';
       json += '"y" : ' + n.y() + ', ';
       json += '"width" : ' + n.width() + ', ';
