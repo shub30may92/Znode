@@ -390,9 +390,9 @@ function NodeGraph(){
        for (var i in curr.connections){
          var c = curr.connections[i];
          if (!c.removed){
-           var nodeA = c.startNode.connectionPos(c.startConnection);
-           var nodeB = c.endNode.connectionPos(c.endConnection);
-           c.attr("path","M " + nodeA.x + " " + nodeA.y + " L " + nodeB.x + " " + nodeB.y);
+           var from_agent = c.startNode.connectionPos(c.startConnection);
+           var to_agent = c.endNode.connectionPos(c.endConnection);
+           c.attr("path","M " + from_agent.x + " " + from_agent.y + " L " + to_agent.x + " " + to_agent.y);
             
          }
        }
@@ -572,8 +572,8 @@ function NodeGraph(){
     for (i in connections){
       var c = connections[i];
       if (!c.removed){
-      json += '{"nodeA" : ' + c.startNode.id + ', ';
-      json += '"nodeB" : ' + c.endNode.id + ', ';
+      json += '{"from_agent" : ' + c.startNode.id + ', ';
+      json += '"to_agent" : ' + c.endNode.id + ', ';
       json += '"conA" : "' + c.startConnection.attr("class") + '", ';
       json += '"conB" : "' + c.endConnection.attr("class") + '"},';
       hasConnections = true;
