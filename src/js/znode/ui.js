@@ -20,10 +20,11 @@ $(function(){
   //   console.log("right click");
   // });
 
-  function rightClickMenu(key, opt) {
+  function contestMenuHandler(key, opt) {
     if("newNode" == key) {
-      console.log(key);
       graph.addNodeAtMouse();
+    } else if("toProdJson" == key) {
+      alert("Feature coming soon");
     }
   }
   $.contextMenu({
@@ -31,7 +32,8 @@ $(function(){
     selector: "#canvas",
     // define the elements of the menu
     items: {
-        newNode: {name: "New Node", callback: rightClickMenu }
+        newNode: {name: "New Node", callback: contestMenuHandler },
+        toProdJson: {name: "To Production Json", callback: contestMenuHandler }
     }
     // there's more, have a look at the demos and docs...
   });

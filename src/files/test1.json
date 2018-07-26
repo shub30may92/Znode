@@ -1,0 +1,1 @@
+{"agents" : [{"code" : 0, "x" : 790, "y" : 251, "width" : 100, "height" : 50, "txt" : "dwef"},{"code" : 1, "x" : 556, "y" : 200, "width" : 100, "height" : 50, "txt" : "wefde"}], "connections" : [{"nodeA" : 1, "nodeB" : 0, "conA" : "right", "conB" : "left"}]}

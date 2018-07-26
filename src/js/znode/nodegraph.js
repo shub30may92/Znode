@@ -550,7 +550,7 @@ function NodeGraph(){
     }
     for (i in data.connections){
       var c = data.connections[i];
-      createConnection(agents[c.from_agent], c.conA, agents[c.to_agent], c.conB);
+      createConnection(agents[c.nodeA], c.conA, agents[c.nodeB], c.conB);
     }
   }
   
