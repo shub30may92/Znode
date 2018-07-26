@@ -1,1 +1,0 @@
-{"agents" : [{"id" : 0, "x" : 790, "y" : 251, "width" : 100, "height" : 50, "txt" : "caes"},{"id" : 1, "x" : 460, "y" : 243, "width" : 100, "height" : 50, "txt" : "dwdo"}], "connections" : [{"nodeA" : 1, "nodeB" : 0, "conA" : "right", "conB" : "left"}]}

@@ -307,8 +307,9 @@ function NodeGraph(){
       });
     }
    
-    n.append("<textarea class='txt' spellcheck='false' />");
-    var txt = $(".node .txt").last();
+    var agent = new Agent();
+    n.append(agent.getAgent());
+    var txt = $(".node .agent").last();
     txt.css("position","absolute");
    
     txt.css({"width" : nodeWidth - 5,
